@@ -111,6 +111,8 @@ namespace Microsoft.Office.OneNote
 
 			XmlAttribute attribute = xmlDocument.CreateAttribute(Name);
 			attribute.Value = ToString();
+
+			parentNode.AppendChild(attribute);
 		}
 
 		private double sizeInPoints;

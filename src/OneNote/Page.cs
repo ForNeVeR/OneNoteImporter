@@ -227,10 +227,6 @@ namespace Microsoft.Office.OneNote
 
 			// We're very sneaky.
 			string xmlns = XmlNamespace;
-			if (Application.GetVersion().ProductBuildPart < 6355)
-			{
-				xmlns = XmlPreviewNamespace;
-			}
 			import.SetAttribute("xmlns", xmlns);
 		}
 
@@ -246,23 +242,6 @@ namespace Microsoft.Office.OneNote
 			string schemaName = typeof (Page).Namespace + ".SimpleImport.xsd";
 
 			Stream xsdStream = assembly.GetManifestResourceStream(schemaName);
-
-			if (Application.GetVersion().ProductBuildPart < 6355)
-			{
-				// Rewrite the schema namespace:
-				StreamReader reader = new StreamReader(xsdStream);
-
-				string schemaString = reader.ReadToEnd();
-				schemaString = schemaString.Replace(XmlNamespace, XmlPreviewNamespace);
-
-				MemoryStream stream = new MemoryStream();
-				StreamWriter writer = new StreamWriter(stream);
-				writer.Write(schemaString);
-				writer.Flush();
-
-				xsdStream = stream;
-				xsdStream.Seek(0, SeekOrigin.Begin);
-			}
 
 			XmlSchema schema = XmlSchema.Read(xsdStream, null);
 
@@ -483,8 +462,7 @@ namespace Microsoft.Office.OneNote
 		private bool committed;
 
 		private const string XmlNamespace = "http://schemas.microsoft.com/office/onenote/2004/import";
-		private const string XmlPreviewNamespace = "http://schemas.microsoft.com/office/onenote/01/2004/import";
-
+		
 		/* ------------------------------------------------------------------ */
 
 		class PageEnumerator : IEnumerator
@@ -526,17 +504,6 @@ namespace Microsoft.Office.OneNote
 
 			private Page page;
 			private int index;
-		}
-
-		private PageObject Children
-		{
-			get
-			{
-				throw new System.NotImplementedException();
-			}
-			set
-			{
-			}
 		}
 	}
 }

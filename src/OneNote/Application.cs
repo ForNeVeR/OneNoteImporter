@@ -53,6 +53,10 @@ namespace Microsoft.Office.OneNote
 					NativeMethods.SetForegroundWindow(window);
 				}
 			}
+			else
+			{
+				Process.Start(GetExecutablePath());
+			}
 		}
 
 		/// <summary>
